@@ -1,4 +1,3 @@
-// Both Start
 #include <iostream>
 #include <fstream>
 #include <string>
@@ -271,9 +270,7 @@ class Room{
 			}
 		}
 };
-// Both End
 
-// MengHong Start
 void CreateStaff(std::vector<Staff>& Staffs, std::vector<User>& Users, const std::map<std::string, float>& Jobs, bool& admin){
 	std::map<std::string, float> StaffJobs;
 	int JobsType, UserType, StaffType, Index = 1, Amount;
@@ -316,6 +313,9 @@ void CreateStaff(std::vector<Staff>& Staffs, std::vector<User>& Users, const std
 					std::cin >> UserType;
 					if (std::cin.fail()){
 						std::cin.clear();
+						std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+						continue;
+					} else {
 						std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 					}
 				} while (UserType < 1 || UserType > 2);
@@ -551,9 +551,7 @@ void DeleteAccount(std::vector<Staff>& Staffs, std::vector<User>& Users){
 		break;
 	}
 }
-// MengHong End
 
-// Rim Start
 void DisplayInfo(std::vector<Staff>& Staffs, std::vector<User>& Users, bool isAdmin){
 	bool hasManager = false, hasReceptionist = false;
 	bool hasStaff = !Staffs.empty();
@@ -741,9 +739,7 @@ void CheckOutRoom(std::vector <Room>& Rooms){
 		std::cout << "Room didn't Exist" << std::endl;
 	}
 }
-// Rim End
 
-// Jester Start
 bool Login(std::vector <User> Users){
 	bool Verified = false;
 	bool isAdmin = false;
@@ -783,9 +779,7 @@ bool Login(std::vector <User> Users){
 	}
 	return isAdmin;
 }
-// Jester Pause
 
-// Sopuol Start
 void readinfo(std::vector <Room>& Rooms, std::vector <Staff>& Staffs, std::vector <User>& Users, const std::map<std::string, float>& Jobs){
 	std::ifstream Customers;
 	Customers.open("Customers.txt");
@@ -805,7 +799,6 @@ void readinfo(std::vector <Room>& Rooms, std::vector <Staff>& Staffs, std::vecto
 			size_t find_age = line.find("Age : ");
 			size_t find_dob = line.find("DOB : ");
 			size_t find_contact = line.find("Contact : ");
-			size_t find_newline = line.find('\n');
 
 			if (find_room != std::string::npos){
 				find_room += 7;
@@ -851,7 +844,7 @@ void readinfo(std::vector <Room>& Rooms, std::vector <Staff>& Staffs, std::vecto
 
 			if (find_contact != std::string::npos){
 				find_contact += 10;
-				Contact = line.substr(find_contact, find_newline - find_contact - 3);
+				Contact = line.substr(find_contact);
 				Foundline += 1;
 			}
 
@@ -894,7 +887,6 @@ void readinfo(std::vector <Room>& Rooms, std::vector <Staff>& Staffs, std::vecto
 			size_t find_st = line.find("ST : ");
 			size_t find_address = line.find("Address : ");
 			size_t find_contact = line.find("Contact : ");
-			size_t find_newline = line.find('\n');
 
 			if (find_id != std::string::npos){
 				find_id += 5;
@@ -946,7 +938,7 @@ void readinfo(std::vector <Room>& Rooms, std::vector <Staff>& Staffs, std::vecto
 
 			if (find_contact != std::string::npos){
 				find_contact += 10;
-				Contact = line.substr(find_contact, find_newline - find_contact - 3);
+				Contact = line.substr(find_contact);
 				Foundline += 1;
 			}
 			
@@ -983,7 +975,6 @@ void readinfo(std::vector <Room>& Rooms, std::vector <Staff>& Staffs, std::vecto
 			size_t find_address = line.find("Address : ");
 			size_t find_contact = line.find("Contact : ");
 			size_t find_password = line.find("Password : ");
-			size_t find_newline = line.find('\n');
 
 			if (find_id != std::string::npos){
 				find_id += 5;
@@ -1041,7 +1032,7 @@ void readinfo(std::vector <Room>& Rooms, std::vector <Staff>& Staffs, std::vecto
 
 			if (find_password != std::string::npos){
 				find_password += 11;
-				Password = line.substr(find_password, find_newline - find_password - 3);
+				Password = line.substr(find_password);
 				Foundline += 1;
 			}
 
@@ -1113,9 +1104,7 @@ void writeinfo(std::vector<Room> Rooms, std::vector<Staff> Staffs, std::vector<U
 	}
 	users.close();
 }
-// Sopuol End
 
-// Panha Start
 class Table{
 	private:
 		int number;
@@ -1151,7 +1140,7 @@ void ManyOrder(std::vector<Table>& Tables, std::vector <std::tuple<std::string, 
 		}
 	}
 
-	std::cout << Menu << " Menu" << std::endl; // Menu Food , Drink
+	std::cout << Menu << " Menu" << std::endl;
 	for (auto& menu : OptimizedMenus){
 		std::cout << index++ << '.' << std::get<0> (menu) << " (" << std::get<1> (menu) << '$' << ')' << std::endl;
 	}
@@ -1311,12 +1300,10 @@ void RestaurantMenu(std::vector <std::tuple <std::string, std::string, float> > 
 				for (int i = 0; i < Tables.size(); i++){
 					if (!(Tables[i].getOrderedfoods().empty())){
 						std::map <std::string, int> OrderedTimes;
-						
 						int index = 1;
 						for (int j = 0; j < Tables[i].getOrderedfoods().size(); j++){
 							OrderedTimes[Tables[i].getOrderedfoods().at(j)]++;
 						}
-						
 						std::cout << "Table : " << Tables[i].getNumber() << '\n'
 								  << "\033[32mOrder List\033[0m\n";
 						for (auto it = OrderedTimes.begin(); it != OrderedTimes.end(); it++){
@@ -1339,8 +1326,7 @@ void RestaurantMenu(std::vector <std::tuple <std::string, std::string, float> > 
 		}
 	} while (Choose != 3);
 }
-// Panha End
-// Jester Continue
+
 bool Menu(bool& shutdownSignal, bool& isAdmin, std::vector <Room>& Rooms, std::vector <User>& Users, std::vector <Staff>& Staffs, const std::map <std::string, float>& Jobs, const Foodtype& Foods, const Foodtype& Drinks, std::vector<Table>& Tables){
 	int Choose;
 	bool found = false;
@@ -1565,7 +1551,7 @@ int main() {
 	std::vector<User> Users;
 
 	User Manager;
-	Manager.setInfo("23", "k", 'F', 23, "01/01/2000", "Manager", "7AM", "Phnom Penh", "0123456789", "k");
+	Manager.setInfo("23", "Hello", 'F', 23, "01/01/2000", "Manager", "7AM", "Phnom Penh", "0123456789", "Hello123");
 	Manager.setSalary(Jobs.at("Manager"));
 	Users.push_back(Manager);
 
@@ -1595,4 +1581,3 @@ int main() {
 	writeinfo(Rooms, Staffs, Users);
 	return 0;
 }
-// Jester End
