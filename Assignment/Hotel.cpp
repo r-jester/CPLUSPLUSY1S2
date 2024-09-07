@@ -597,6 +597,103 @@ void DisplayInfo(std::vector<Staff>& Staffs, std::vector<User>& Users, bool isAd
 	}
 }
 
+void SearchInfo(std::vector<Staff> Staffs, std::vector<User>& Users, bool isAdmin){
+	std::string username, id;
+	bool isfound = false;
+	int searchtype;
+	char usertypes = (isAdmin) ? '1' : '2';
+
+	do {
+		clearscreen;
+		std::cout << "======================>> Search Staffs <<=====================\n"
+				<< "1. Name Search\n"
+				<< "2. ID Search\n"
+				<< "Choose : ";
+		std::cin >> searchtype;
+		if (std::cin.fail()){
+			std::cin.clear();
+			std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+			continue;
+		} else {
+			std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+		}
+	} while (searchtype < 1 || searchtype > 2);
+
+	switch (searchtype) {
+		case 1:
+			std::cout << "Enter Staff Name : ";
+			getline(std::cin >> std::ws, username);
+			std::cout << std::endl;
+			switch (usertypes){
+				case '1':
+					for (auto& user : Users){
+						if (username == user.getName()){
+							user.DisplayInfo();
+							std::cout << std::endl;
+							isfound = true;
+						}
+					}
+					for (auto& staffs : Staffs){
+						if (username == staffs.getName()){
+							staffs.DisplayInfo();
+							std::cout << std::endl;
+							isfound = true;
+						}
+					}
+					break;
+				case '2':
+					for (auto& staffs : Staffs){
+						if (username == staffs.getName()){
+							staffs.DisplayInfo();
+							std::cout << std::endl;
+							isfound = true;
+						}
+					}
+					break;
+			}
+			if (!isfound){
+				std::cout << "Not found!!!" << std::endl;
+			}
+			break;
+		case 2:
+			std::cout << "Enter Staff ID : ";
+			getline(std::cin >> std::ws, id);
+			std::cout << std::endl;
+			switch (usertypes){
+				case '1':
+					for (auto& user : Users){
+						if (id == user.getID()){
+							user.DisplayInfo();
+							std::cout << std::endl;
+							isfound = true;
+						}
+					}
+					for (auto& staffs : Staffs){
+						if (id == staffs.getID()){
+							staffs.DisplayInfo();
+							std::cout << std::endl;
+							isfound = true;
+						}
+					}
+					break;
+				case '2':
+					for (auto& staffs : Staffs){
+						if (id == staffs.getID()){
+							staffs.DisplayInfo();
+							std::cout << std::endl;
+							isfound = true;
+						}
+					}
+					break;
+			}
+			if (!isfound){
+				std::cout << "Not found!!!" << std::endl;
+			}
+			break;
+	}
+	
+}
+
 void OrderRoom(std::vector<Room>& Rooms){
 	bool Ordered = false, isAvailable = false, isFull = true;
 	char Foodservice;
@@ -1340,9 +1437,10 @@ bool Menu(bool& shutdownSignal, bool& isAdmin, std::vector <Room>& Rooms, std::v
 				  << "5.Logout\n"
 				  << "6.Shutdown\n"
 				  << "7.Restaurant\n"
-				  << "8.Display Staff" << std::endl;
+				  << "8.Display Staff\n"
+				  << "9.Search Staff" << std::endl;
 		if (isAdmin){
-			std::cout << "9.Delete User\n"
+			std::cout << "10.Delete User\n"
 					  << "---> ";
 			std::cin >> Choose;
 			while (getchar() != '\n');
@@ -1359,7 +1457,7 @@ bool Menu(bool& shutdownSignal, bool& isAdmin, std::vector <Room>& Rooms, std::v
 				continue;
 			}
 		}
-	} while (!(isAdmin) && Choose > 8);
+	} while (!(isAdmin) && Choose > 9);
 
 	switch (Choose){
 		case 1:
@@ -1419,6 +1517,11 @@ bool Menu(bool& shutdownSignal, bool& isAdmin, std::vector <Room>& Rooms, std::v
 			getchar();
 			break;
 		case 9:
+			SearchInfo(Staffs, Users, isAdmin);
+			std::cout << "Press enter to continue!!!";
+			getchar();
+			break;
+		case 10:
 			clearscreen;
 			DeleteAccount(Staffs, Users);
 			std::cout << "Press enter to continue!!!";
